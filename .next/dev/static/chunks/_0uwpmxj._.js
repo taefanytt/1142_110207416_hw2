@@ -376,11 +376,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/next/navigation.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$quizData$2e$json$2e5b$json$5d2e$cjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/data/quizData.json.[json].cjs [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$store$2f$store$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/store/store.js [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$html2canvas$2f$dist$2f$html2canvas$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/html2canvas/dist/html2canvas.js [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
-;
 ;
 ;
 ;
@@ -408,38 +406,28 @@ function Result() {
     const resetScore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$store$2f$store$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePsyStore"])({
         "Result.usePsyStore[resetScore]": (state)=>state.resetScore
     }["Result.usePsyStore[resetScore]"]);
-    // 綁定截圖區域的Ref
-    const snapshotRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
     const resultKey = resultOrder.reduce((winner, key)=>{
         return scoreBoard[key] > scoreBoard[winner] ? key : winner;
     }, "A");
     const result = __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$quizData$2e$json$2e5b$json$5d2e$cjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].results[resultKey];
     const resultImage = resultImages[resultKey];
-    // 截圖下載功能
-    async function downloadResultImage() {
-        if (!snapshotRef.current) return;
-        setShareText("生成卡片中...");
+    // 恢復原版文字分享與剪貼簿複製功能
+    async function shareResult() {
+        const text = `我的深夜食堂靈魂料理是「${result.name}」：${result.description}`;
         try {
-            // 執行畫布渲染，scale: 2 確保圖片清晰不模糊
-            const canvas = await (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$html2canvas$2f$dist$2f$html2canvas$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"])(snapshotRef.current, {
-                useCORS: true,
-                backgroundColor: null,
-                scale: 2
-            });
-            // 轉換為圖片基地網址並下載
-            const imageUri = canvas.toDataURL("image/png");
-            const link = document.createElement("a");
-            link.download = `深夜食堂-${result.name}.png`;
-            link.href = imageUri;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            setShareText("已儲存圖片！");
-            window.setTimeout(()=>setShareText("分享結果"), 2000);
-        } catch (error) {
-            console.error("Screenshot failed:", error);
-            setShareText("儲存失敗");
-            window.setTimeout(()=>setShareText("分享結果"), 2000);
+            if (navigator.share) {
+                await navigator.share({
+                    title: __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$quizData$2e$json$2e5b$json$5d2e$cjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].quizTitle,
+                    text
+                });
+            } else {
+                await navigator.clipboard.writeText(text);
+                setShareText("已複製到剪貼簿");
+                window.setTimeout(()=>setShareText("分享結果"), 1600);
+            }
+        } catch  {
+            setShareText("稍後再試");
+            window.setTimeout(()=>setShareText("分享結果"), 1600);
         }
     }
     function playAgain() {
@@ -450,7 +438,7 @@ function Result() {
         className: "relative min-h-full overflow-hidden bg-[#12161A] px-6 py-8 text-[#EAECEF] transition-all duration-300 ease-in-out",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$image$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                src: "/result_bg.png",
+                src: "/end.jpg",
                 alt: "",
                 fill: true,
                 priority: true,
@@ -458,43 +446,42 @@ function Result() {
                 className: "object-cover object-center"
             }, void 0, false, {
                 fileName: "[project]/app/result/page.tsx",
-                lineNumber: 76,
+                lineNumber: 61,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute inset-0 bg-[#12161A]/40"
             }, void 0, false, {
                 fileName: "[project]/app/result/page.tsx",
-                lineNumber: 84,
+                lineNumber: 69,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/45"
             }, void 0, false, {
                 fileName: "[project]/app/result/page.tsx",
-                lineNumber: 85,
+                lineNumber: 70,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
                 className: "relative z-10 mx-auto flex min-h-[calc(100vh-4rem)] w-full max-w-[390px] animate-page-fade flex-col justify-center gap-8 font-serif",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        ref: snapshotRef,
-                        className: "p-4 rounded-3xl space-y-7 text-center",
+                        className: "space-y-7 text-center",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "space-y-2",
                                 children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                                    className: "text-lg font-normal leading-8 text-[#EAECEF] drop-shadow-md",
+                                    className: "text-lg font-normal leading-8 text-[#EAECEF]",
                                     children: "『今晚，專屬於你的靈魂料理是——』"
                                 }, void 0, false, {
                                     fileName: "[project]/app/result/page.tsx",
-                                    lineNumber: 92,
+                                    lineNumber: 75,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/result/page.tsx",
-                                lineNumber: 91,
+                                lineNumber: 74,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -508,43 +495,43 @@ function Result() {
                                     className: "h-auto w-full max-w-[350px] animate-soft-float rounded-[26px] object-contain mix-blend-multiply drop-shadow-[0_22px_36px_rgba(0,0,0,0.26)] transition-all duration-300 ease-in-out"
                                 }, void 0, false, {
                                     fileName: "[project]/app/result/page.tsx",
-                                    lineNumber: 99,
+                                    lineNumber: 82,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/result/page.tsx",
-                                lineNumber: 98,
+                                lineNumber: 81,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "space-y-4",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                                        className: "text-4xl font-bold leading-tight text-[#FFB03A] drop-shadow",
+                                        className: "text-4xl font-bold leading-tight text-[#FFB03A]",
                                         children: result.name
                                     }, void 0, false, {
                                         fileName: "[project]/app/result/page.tsx",
-                                        lineNumber: 111,
+                                        lineNumber: 94,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                        className: "mx-auto max-w-sm text-left text-[15px] leading-8 text-[#EAECEF]/90 drop-shadow-sm",
+                                        className: "mx-auto max-w-sm text-left text-[15px] leading-8 text-[#EAECEF]/90",
                                         children: result.description
                                     }, void 0, false, {
                                         fileName: "[project]/app/result/page.tsx",
-                                        lineNumber: 114,
+                                        lineNumber: 98,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/result/page.tsx",
-                                lineNumber: 110,
+                                lineNumber: 93,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/result/page.tsx",
-                        lineNumber: 90,
+                        lineNumber: 73,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -553,11 +540,11 @@ function Result() {
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 type: "button",
                                 className: "rounded-full bg-[#FFB03A] px-2 py-4 text-sm font-bold text-[#12161A] shadow-[0_12px_30px_rgba(255,176,58,0.22)] transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-[0_16px_40px_rgba(255,176,58,0.36)] active:scale-95",
-                                onClick: downloadResultImage,
+                                onClick: shareResult,
                                 children: shareText
                             }, void 0, false, {
                                 fileName: "[project]/app/result/page.tsx",
-                                lineNumber: 122,
+                                lineNumber: 106,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -567,29 +554,29 @@ function Result() {
                                 children: "重新測驗"
                             }, void 0, false, {
                                 fileName: "[project]/app/result/page.tsx",
-                                lineNumber: 129,
+                                lineNumber: 113,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/result/page.tsx",
-                        lineNumber: 121,
+                        lineNumber: 105,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/result/page.tsx",
-                lineNumber: 87,
+                lineNumber: 72,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/result/page.tsx",
-        lineNumber: 74,
+        lineNumber: 59,
         columnNumber: 5
     }, this);
 }
-_s(Result, "mV0HZoLEt9/9B/nvLf/J7zqUV8A=", false, function() {
+_s(Result, "oFF/Jefx/AHJwoBgXV3491g4Ow0=", false, function() {
     return [
         __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRouter"],
         __TURBOPACK__imported__module__$5b$project$5d2f$store$2f$store$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["usePsyStore"],
